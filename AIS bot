@@ -1,0 +1,374 @@
+import React, { useState } from 'react';
+import { 
+  ShoppingCart, 
+  Search, 
+  Menu, 
+  User, 
+  X, 
+  Star, 
+  ChevronRight, 
+  Droplet,
+  Fish,
+  ShieldCheck,
+  Truck,
+  Heart
+} from 'lucide-react';
+
+// --- MOCK DATA ---
+
+const CATEGORIES = [
+  { id: 1, name: 'Aquariums & Tanks', image: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' },
+  { id: 2, name: 'Live Fish', image: 'https://images.unsplash.com/photo-1524704654690-b56c05c78a00?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' },
+  { id: 3, name: 'Pumps & Filters', image: 'https://images.unsplash.com/photo-1542332606-b384e0fb4618?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' },
+  { id: 4, name: 'Live Plants', image: 'https://images.unsplash.com/photo-1551000628-984488bde157?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' },
+  { id: 5, name: 'Lighting', image: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' },
+  { id: 6, name: 'Food & Care', image: 'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' },
+];
+
+const PRODUCTS = [
+  { id: 1, name: 'Oceanic Pro Glass Aquarium - 20 Gal', price: 149.99, rating: 4.8, reviews: 124, image: 'https://images.unsplash.com/photo-1535591273668-578e31182c4f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', badge: 'Best Seller' },
+  { id: 2, name: 'Schooling Neon Tetras (Pack of 10)', price: 19.99, rating: 4.5, reviews: 89, image: 'https://images.unsplash.com/photo-1524704654690-b56c05c78a00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', badge: null },
+  { id: 3, name: 'AquaFlow Premium Canister Filter', price: 89.50, rating: 4.9, reviews: 210, image: 'https://images.unsplash.com/photo-1542332606-b384e0fb4618?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', badge: 'Sale' },
+  { id: 4, name: 'Vibrant Coral Frag Pack', price: 54.99, rating: 4.7, reviews: 45, image: 'https://images.unsplash.com/photo-1582967788606-a171c1080cb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', badge: 'New' },
+  { id: 5, name: 'LED Reef Spectrum Light Bar', price: 129.99, rating: 4.6, reviews: 78, image: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', badge: null },
+  { id: 6, name: 'Premium Tropical Fish Flakes', price: 12.99, rating: 4.8, reviews: 340, image: 'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', badge: null },
+  { id: 7, name: 'Driftwood Aquascape Centerpiece', price: 34.99, rating: 4.4, reviews: 56, image: 'https://images.unsplash.com/photo-1551000628-984488bde157?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', badge: null },
+  { id: 8, name: 'Digital Water Testing Kit', price: 45.00, rating: 4.9, reviews: 112, image: 'https://images.unsplash.com/photo-1616422285623-14c1328b9c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', badge: 'Sale' },
+];
+
+const REVIEWS = [
+  { id: 1, name: 'Sarah Jenkins', role: 'Aquarist', avatar: 'https://i.pravatar.cc/150?img=1', text: 'AquaMarine has the healthiest fish I have ever purchased online. They arrived perfectly packed and vibrant!', rating: 5 },
+  { id: 2, name: 'David Lee', role: 'Beginner', avatar: 'https://i.pravatar.cc/150?img=11', text: 'The starter kit was exactly what I needed. Customer service was so helpful in answering all my cycling questions.', rating: 5 },
+  { id: 3, name: 'Emily Chen', role: 'Reef Keeper', avatar: 'https://i.pravatar.cc/150?img=5', text: 'Unbelievable selection of corals. The colors are even better in person than in the photos. Highly recommend!', rating: 4 },
+];
+
+const BRANDS = ['AquaClear', 'Fluval', 'Tetra', 'Seachem', 'Marineland', 'Coralife'];
+
+// --- COMPONENTS ---
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <nav className="bg-white shadow-sm sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <div className="bg-cyan-500 p-2 rounded-lg">
+              <Fish className="h-6 w-6 text-white" />
+            </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+              AquaMarine
+            </span>
+          </div>
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex space-x-8 items-center">
+            <a href="#" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">Home</a>
+            <a href="#" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">Shop</a>
+            <a href="#" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">Livestock</a>
+            <a href="#" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">Blog</a>
+          </div>
+
+          {/* Icons */}
+          <div className="hidden md:flex items-center space-x-5">
+            <button className="text-gray-500 hover:text-cyan-600 transition-colors">
+              <Search className="h-5 w-5" />
+            </button>
+            <button className="text-gray-500 hover:text-cyan-600 transition-colors">
+              <User className="h-5 w-5" />
+            </button>
+            <button className="text-gray-500 hover:text-cyan-600 transition-colors relative">
+              <ShoppingCart className="h-5 w-5" />
+              <span className="absolute -top-2 -right-2 bg-amber-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                3
+              </span>
+            </button>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <button 
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-gray-500 hover:text-cyan-600 focus:outline-none"
+            >
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden bg-white border-t">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="#" className="block px-3 py-2 text-gray-700 hover:bg-cyan-50 rounded-md font-medium">Home</a>
+            <a href="#" className="block px-3 py-2 text-gray-700 hover:bg-cyan-50 rounded-md font-medium">Shop</a>
+            <a href="#" className="block px-3 py-2 text-gray-700 hover:bg-cyan-50 rounded-md font-medium">Livestock</a>
+            <a href="#" className="block px-3 py-2 text-gray-700 hover:bg-cyan-50 rounded-md font-medium">Blog</a>
+            <div className="flex space-x-4 px-3 py-4 border-t mt-2">
+              <Search className="h-5 w-5 text-gray-500" />
+              <User className="h-5 w-5 text-gray-500" />
+              <div className="relative">
+                <ShoppingCart className="h-5 w-5 text-gray-500" />
+                <span className="absolute -top-1 -right-2 bg-amber-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+const Hero = () => {
+  return (
+    <div className="relative bg-blue-900">
+      <div className="absolute inset-0 overflow-hidden">
+        <img
+          className="w-full h-full object-cover opacity-40 mix-blend-overlay"
+          src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+          alt="Aquarium background"
+        />
+      </div>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 flex flex-col items-start">
+        <span className="inline-block py-1 px-3 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400 text-sm font-semibold mb-4 tracking-wider backdrop-blur-sm">
+          AQUATIC PERFECTION
+        </span>
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 max-w-2xl">
+          Bring the <span className="text-cyan-400">Ocean</span> Into Your Living Room.
+        </h1>
+        <p className="text-lg text-blue-100 max-w-xl mb-8">
+          Discover premium aquariums, vibrant livestock, and top-tier equipment. Everything you need to create a stunning underwater ecosystem.
+        </p>
+        <div className="flex flex-wrap gap-4">
+          <button className="bg-cyan-500 hover:bg-cyan-400 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-lg shadow-cyan-500/30 flex items-center">
+            Shop Now <ChevronRight className="ml-2 h-5 w-5" />
+          </button>
+          <button className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-3 rounded-lg font-bold transition-all backdrop-blur-sm">
+            Explore Guides
+          </button>
+        </div>
+      </div>
+      
+      {/* Wave shape divider */}
+      <div className="absolute bottom-0 w-full overflow-hidden leading-[0]">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-[calc(100%+1.3px)] h-[40px] lg:h-[60px]">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118,130.98,131.1,201.39,114.7,243.68,105,284.18,80.12,321.39,56.44Z" className="fill-slate-50"></path>
+        </svg>
+      </div>
+    </div>
+  );
+};
+
+const Features = () => {
+  return (
+    <div className="bg-slate-50 pt-8 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center space-x-4 border border-gray-100">
+            <div className="bg-blue-100 p-3 rounded-full text-blue-600">
+              <Truck className="h-6 w-6" />
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900">Free Shipping</h3>
+              <p className="text-sm text-gray-500">On orders over $99</p>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center space-x-4 border border-gray-100">
+            <div className="bg-cyan-100 p-3 rounded-full text-cyan-600">
+              <Droplet className="h-6 w-6" />
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900">Live Arrival Guarantee</h3>
+              <p className="text-sm text-gray-500">100% healthy delivery</p>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center space-x-4 border border-gray-100">
+            <div className="bg-amber-100 p-3 rounded-full text-amber-600">
+              <ShieldCheck className="h-6 w-6" />
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900">Expert Support</h3>
+              <p className="text-sm text-gray-500">Advice from aquarists</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Categories = () => {
+  return (
+    <section className="py-16 bg-slate-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Shop by Category</h2>
+          <p className="mt-4 text-gray-500 max-w-2xl mx-auto">Everything you need, neatly organized. Find exactly what your aquatic friends desire.</p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          {CATEGORIES.map((cat) => (
+            <div key={cat.id} className="group cursor-pointer flex flex-col items-center">
+              <div className="w-32 h-32 rounded-full overflow-hidden mb-4 shadow-lg ring-4 ring-white group-hover:ring-cyan-200 transition-all duration-300">
+                <img 
+                  src={cat.image} 
+                  alt={cat.name} 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <h3 className="font-semibold text-gray-800 group-hover:text-cyan-600 transition-colors text-center">{cat.name}</h3>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Products = () => {
+  return (
+    <section className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-end mb-10">
+          <div>
+            <h2 className="text-3xl font-extrabold text-gray-900">Trending Now</h2>
+            <p className="mt-2 text-gray-500">Our most popular products this week.</p>
+          </div>
+          <a href="#" className="hidden sm:flex text-cyan-600 font-semibold hover:text-cyan-700 items-center">
+            View All Products <ChevronRight className="h-4 w-4 ml-1" />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {PRODUCTS.map((product) => (
+            <div key={product.id} className="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 group">
+              <div className="relative h-56 overflow-hidden">
+                {product.badge && (
+                  <span className={`absolute top-3 left-3 px-3 py-1 text-xs font-bold rounded-full z-10 
+                    ${product.badge === 'Sale' ? 'bg-red-500 text-white' : 
+                      product.badge === 'New' ? 'bg-emerald-500 text-white' : 
+                      'bg-amber-500 text-white'}`}>
+                    {product.badge}
+                  </span>
+                )}
+                <button className="absolute top-3 right-3 p-2 bg-white/80 hover:bg-white rounded-full text-gray-400 hover:text-red-500 z-10 transition-colors backdrop-blur-sm shadow-sm">
+                  <Heart className="h-4 w-4" />
+                </button>
+                <img 
+                  src={product.image} 
+                  alt={product.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-5">
+                <div className="flex items-center space-x-1 mb-2">
+                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  <span className="text-sm font-medium text-gray-700">{product.rating}</span>
+                  <span className="text-sm text-gray-400">({product.reviews})</span>
+                </div>
+                <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 hover:text-cyan-600 cursor-pointer">{product.name}</h3>
+                <div className="flex justify-between items-center mt-4">
+                  <span className="text-xl font-bold text-gray-900">${product.price.toFixed(2)}</span>
+                  <button className="bg-gray-900 hover:bg-cyan-600 text-white p-2.5 rounded-lg transition-colors shadow-md">
+                    <ShoppingCart className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 text-center sm:hidden">
+          <button className="w-full bg-cyan-50 text-cyan-700 py-3 rounded-lg font-bold hover:bg-cyan-100 transition-colors">
+            View All Products
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const OfferBanner = () => {
+  return (
+    <section className="py-12 bg-slate-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-3xl overflow-hidden shadow-2xl relative">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay"></div>
+          <div className="relative px-6 py-12 md:py-16 md:px-12 flex flex-col md:flex-row items-center justify-between">
+            <div className="text-center md:text-left mb-8 md:mb-0 max-w-lg">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">Ready to start your first Aquascape?</h2>
+              <p className="text-emerald-50 text-lg mb-6">Get 20% off on all beginner tank kits and live plant bundles. Use code <span className="font-mono bg-white/20 px-2 py-1 rounded">START20</span> at checkout.</p>
+              <button className="bg-white text-teal-600 hover:bg-gray-50 px-8 py-3 rounded-lg font-bold transition-all shadow-lg">
+                Shop Starter Kits
+              </button>
+            </div>
+            <div className="hidden md:block w-64 h-64 relative rounded-full border-8 border-white/20 overflow-hidden shadow-2xl">
+               <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Aquascape" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Reviews = () => {
+  return (
+    <section className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">What Aquarists Say</h2>
+          <p className="mt-4 text-gray-500 max-w-2xl mx-auto">Don't just take our word for it. See why thousands of hobbyists trust AquaMarine.</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {REVIEWS.map((review) => (
+            <div key={review.id} className="bg-slate-50 p-8 rounded-2xl border border-gray-100 shadow-sm relative">
+              <div className="flex items-center space-x-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className={`h-5 w-5 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
+                ))}
+              </div>
+              <p className="text-gray-700 italic mb-6">"{review.text}"</p>
+              <div className="flex items-center space-x-4">
+                <img src={review.avatar} alt={review.name} className="h-12 w-12 rounded-full border-2 border-cyan-200" />
+                <div>
+                  <h4 className="font-bold text-gray-900">{review.name}</h4>
+                  <p className="text-sm text-cyan-600 font-medium">{review.role}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Brands = () => {
+  return (
+    <section className="py-12 bg-white border-t border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p className="text-center text-sm font-semibold text-gray-400 uppercase tracking-widest mb-8">Trusted by Top Aquatic Brands</p>
+        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+          {BRANDS.map((brand, index) => (
+            <div key={index} className="text-2xl font-black text-gray-400 font-sans tracking-tight hover:text-cyan-600 transition-colors cursor-default">
+              {brand.toUpperCase()}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Footer = () => {
+  return (
+    <footer className="bg-gray-900 text-gray-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          
+          {/* Brand Col */}
+          <div>
+            <div className="flex it
